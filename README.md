@@ -146,7 +146,7 @@ Kích hoạt khi người chơi thực hiện các hành động "nghịch ngợ
 * **Cảnh báo:** Thanh chỉ số **Nghi ngờ (Suspicion)** sẽ rung lên và chuyển màu, biểu thị sự mất kiên nhẫn của thú cưng.
 * **Kết quả (Penalty):** Nếu chỉ số Nghi ngờ vượt ngưỡng 100%, thú cưng sẽ thực hiện một "Phản ứng đáp trả" hài hước (ví dụ: cướp dụng cụ, "đá" người chơi khỏi màn hình). 
 * **Kết thúc:** Phiên chơi hiện tại sẽ dừng lại (End Game) sau phản ứng của thú cưng, yêu cầu người chơi bắt đầu một phiên mới.
-* 
+  
 ### 4. Cấu trúc thư mục
 
 Để đảm bảo tính tổ chức và dễ dàng bảo trì cho các chức năng **UC 1+2**, dự án được cấu trúc theo tiêu chuẩn của một ứng dụng Spring Boot hiện đại:
