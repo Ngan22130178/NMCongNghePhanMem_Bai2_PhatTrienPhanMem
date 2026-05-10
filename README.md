@@ -290,4 +290,4 @@ Dành cho việc demo nhanh mà không cần thao tác với lệnh Git:
 Dành cho người lập trình đang mở project:
 1. Tìm MySillyBestieApplication trong project.
 2. Nhấn nút Run Java ở góc trên.
-3. Mở `http://127.0.0.1:8080/` trong trình duyệt web.
+3. Mở `http://localhost:8080/` trong trình duyệt web.
