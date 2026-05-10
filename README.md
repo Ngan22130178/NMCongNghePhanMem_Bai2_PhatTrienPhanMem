@@ -146,7 +146,45 @@ Kích hoạt khi người chơi thực hiện các hành động "nghịch ngợ
 * **Cảnh báo:** Thanh chỉ số **Nghi ngờ (Suspicion)** sẽ rung lên và chuyển màu, biểu thị sự mất kiên nhẫn của thú cưng.
 * **Kết quả (Penalty):** Nếu chỉ số Nghi ngờ vượt ngưỡng 100%, thú cưng sẽ thực hiện một "Phản ứng đáp trả" hài hước (ví dụ: cướp dụng cụ, "đá" người chơi khỏi màn hình). 
 * **Kết thúc:** Phiên chơi hiện tại sẽ dừng lại (End Game) sau phản ứng của thú cưng, yêu cầu người chơi bắt đầu một phiên mới.
-  
+* 
+### 4. Cấu trúc thư mục
+
+Để đảm bảo tính tổ chức và dễ dàng bảo trì cho các chức năng **UC 1+2**, dự án được cấu trúc theo tiêu chuẩn của một ứng dụng Spring Boot hiện đại:
+
+```text
+my-silly-bestie/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/sillybestie/
+│   │   │       ├── controller/
+│   │   │       │   └── PetController.java       <-- Tiếp nhận yêu cầu chọn thú cưng/dụng cụ
+│   │   │       ├── dao/
+│   │   │       │   └── PetDAO.java              <-- Truy vấn dữ liệu trực tiếp từ Database
+│   │   │       ├── dto/
+│   │   │       │   └── PetDTO.java              <-- Cấu trúc dữ liệu gọn nhẹ gửi về Client
+│   │   │       ├── entity/
+│   │   │       │   └── PetEntity.java           <-- Đối tượng ánh xạ từ bảng Database
+│   │   │       └── SillyBestieApplication.java  <-- Lớp khởi chạy ứng dụng
+│   │   │
+│   │   ├── resources/
+│   │   │   ├── static/                          <-- Tài nguyên tĩnh (Frontend)
+│   │   │   │   ├── assets/
+│   │   │   │   │   ├── images/
+│   │   │   │   │   │   ├── pets/                <-- Chứa ảnh nhân vật (capy.png, cat.png...)
+│   │   │   │   │   │   └── tools/               <-- Chứa icon dụng cụ (comb.png, brush.png)
+│   │   │   │   │   └── audio/                   <-- Hiệu ứng âm thanh phản hồi cảm giác
+│   │   │   │   ├── css/
+│   │   │   │   │   └── style.css                <-- Định nghĩa giao diện và Custom Cursor
+│   │   │   │   ├── js/
+│   │   │   │   │   └── script.js                <-- Xử lý gọi API và cập nhật giao diện
+│   │   │   │   └── index.html                   <-- Trang giao diện chính của trò chơi
+│   │   │   │
+│   │   │   └── application.properties           <-- Cấu hình Database và hệ thống
+│   │   └── webapp/                              <-- (Tùy chọn) Nếu mở rộng thêm JSP
+│
+└── pom.xml                                      <-- Quản lý thư viện (Spring JDBC, MySQL, v.v.)
+```
 ## g. Implement (Hiện thực hóa UC 1+2)
 Hệ thống kết hợp mẫu thiết kế **DAO** để truy xuất dữ liệu và **DTO** để tối ưu hóa dữ liệu truyền tải về phía giao diện (Frontend).
 
