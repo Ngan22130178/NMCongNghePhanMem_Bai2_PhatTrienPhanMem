@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>My Silly Bestie - Chăm sóc thú cưng</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>My Silly Bestie</h1>
+        
+        <div class="panel">
+            <h3>Bước 1: Chọn bạn đồng hành</h3>
+            <button onclick="selectPet('capy-01')">Capybara</button>
+            <button onclick="selectPet('cat-02')">Mèo Ngáo</button>
+        </div>
+
+        <div class="panel">
+            <h3>Bước 2: Chọn dụng cụ tương tác</h3>
+            <button onclick="useTool('comb')">Cầm cái lược</button>
+            
+            <button onclick="useTool('hand')">Bỏ dụng cụ (Dùng tay)</button>
+        </div>
+
+        <div id="pet-stage" class="stage">
+            <h2 id="display-name">Hãy chọn thú cưng để bắt đầu</h2>
+            <div class="pet-wrapper">
+                <img id="pet-img" src="" style="display:none;">
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

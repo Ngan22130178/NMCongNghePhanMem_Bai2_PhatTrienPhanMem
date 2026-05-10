@@ -1,0 +1,91 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0fdf4; 
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Container cho toàn bộ các nút bấm */
+.controls {
+    margin-bottom: 20px;
+}
+
+.panel {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Khung chứa chính (Stage) */
+.stage {
+    width: 700px; /* Tăng nhẹ chiều rộng để giống ảnh mẫu */
+    height: 450px; 
+    margin: 20px auto;
+    border: 4px solid #bbf7d0; /* Viền xanh nhạt chuẩn chỉnh */
+    border-radius: 25px;
+    background-color: #ffffff;
+    
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: flex-start; /* Để tên thú cưng nằm lên trên cùng */
+    padding: 25px;
+    box-sizing: border-box; 
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Tên thú cưng bên trong Stage */
+#display-name {
+    margin: 0 0 15px 0; /* Khoảng cách phía dưới tên */
+    font-size: 1.6rem;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Container chứa ảnh (Vùng chiếm chỗ còn lại) */
+.pet-wrapper {
+    width: 100%;
+    flex: 1; /* Tự động lấp đầy phần diện tích còn lại của stage */
+    display: flex;
+    align-items: center; /* Căn giữa ảnh theo chiều dọc */
+    justify-content: center; /* Căn giữa ảnh theo chiều ngang */
+}
+
+/* Tính toán kích thước ảnh thú cưng chuẩn xác */
+#pet-img {
+    max-width: 95%; /* Chiếm tối đa 95% chiều rộng wrapper */
+    max-height: 95%; /* Chiếm tối đa 95% chiều cao wrapper */
+    
+    object-fit: contain; /* Luôn giữ tỉ lệ, không bị móp ảnh */
+    width: auto;
+    height: auto;
+    
+    transition: transform 0.2s ease-in-out;
+}
+
+/* UC2: Thay đổi con trỏ chuột */
+/* Dùng Emoji cái lược làm con trỏ */
+.cursor-comb {
+    /* 16 16 là điểm chạm của con trỏ */
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' style='font-size:30px'><text y='35'>🪮</text></svg>") 16 16, auto !important;
+}
+
+/* UC2: Khi chọn Bàn tay - Dùng icon 'grab' (bàn tay xòe) */
+.cursor-hand {
+    cursor: grab !important;
+}
+
+/* Hiệu ứng khi đang nhấn giữ chuột (đang chải/đang xoa) */
+.stage.cursor-comb:active {
+    cursor: crosshair !important; /* Đổi sang hình chữ thập khi nhấn */
+}
+
+.stage.cursor-hand:active {
+    cursor: grabbing !important; /* Bàn tay nắm lại khi nhấn */
+}
