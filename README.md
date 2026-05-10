@@ -36,14 +36,14 @@ Người chơi thực hiện các hành động nghịch ngợm.
 
 Hệ thống phân tách rõ ràng giữa hành động của người dùng và các xử lý logic tự động từ phía máy chủ.
 
-![Sơ đồ Use Case](/doc/LuocDoUsecase.drawio.sgv)
+![Sơ đồ Use Case](/doc/LuocDoUsecase.drawio.svg)
 *Hình 3.1: Sơ đồ Use Case tổng quát của hệ thống My Silly Bestie*
 
 ---
 
 ## c. Kiến trúc hệ thống (System Architecture)
 Dự án áp dụng mô hình kiến trúc phân lớp (Layered Architecture) để đảm bảo tính dễ bảo trì và mở rộng.
-![Layered Architecture](doc/SoDoKienTruc.drawio.sgv)
+![Layered Architecture](doc/SoDoKienTruc.drawio.svg)
 *Hình 3.2: Mô hình kiến trúc phân lớp của My Silly Bestie*
 
 ### 1. Thông số kỹ thuật (Technical Stack)
