@@ -225,3 +225,45 @@ public ResponseEntity<PetDTO> selectPet(@PathVariable String id) {
 Toàn bộ tài nguyên tĩnh được lưu trữ trực tiếp trong thư mục dự án để đảm bảo tính đóng gói:
 Đường dẫn: src/main/resources/static/assets/
 Cơ chế gọi: Frontend nhận imagePath từ DTO (ví dụ: capy.png) và truy xuất qua URL /assets/images/pets/capy.png.
+### 5. Hướng dẫn cài đặt môi trường phát triển
+Vì bạn dùng IntelliJ IDEA để code Web (HTML/CSS/JS), chúng ta sẽ thiết lập để IDE này hỗ trợ bạn như một công cụ lập trình Web chuyên dụng.
+* Bước 1: Chuẩn bị phần mềm
+IntelliJ IDEA: Bạn có thể dùng bản Ultimate (hỗ trợ Web tốt nhất) hoặc bản Community (vẫn code được HTML/JS nhưng cần cài thêm plugin).
+Trình duyệt: Cài đặt Google Chrome để sử dụng bộ công cụ Debug (F12) cực mạnh.
+* Bước 2: Khởi tạo Project chuẩn Web
+Mở IntelliJ -> New Project.
+Chọn Static Web (nếu không thấy, chọn Empty Project).
+Đặt tên: BruhJjaemu.
+Tại cửa sổ Project, chuột phải vào tên project -> New -> Directory. Tạo các thư mục sau để quản lý kiến trúc hệ thống (như mục c đã bàn):
+assets/: Chứa ảnh mèo, âm thanh.
+css/: Chứa file định dạng style.css.
+js/: Chứa các file logic như main.js, Animal.js.
+* Bước 3: Cấu hình IntelliJ để code "sướng" hơn
+Cài đặt Plugin: Vào File -> Settings -> Plugins. Tìm và cài:
+Prettier: Để tự động căn chỉnh code HTML/JS cho đẹp.
+Live Edit: Cập nhật thay đổi trên trình duyệt ngay khi bạn gõ code mà không cần F5.
+Bật kiểm tra lỗi JS: Vào Settings -> Languages & Frameworks -> JavaScript. Chọn phiên bản ECMAScript 6+.
+### 6.Hướng dẫn Deployment (Triển khai game)
+Sau khi code xong, bạn không nên chỉ giữ nó ở localhost. Hãy đưa nó lên mạng để mọi người cùng "chải lông mèo".
+* Cách 1: Triển khai lên GitHub Pages (Dành cho bản chính thức)
+Đây là cách chuyên nghiệp nhất để lưu trữ code và chạy game miễn phí.
+Tạo Repository: Lên GitHub, tạo một repo mới tên bruh-jjaemu.
+ Đẩy code lên: Trong Terminal của IntelliJ, gõ:
+git init
+git add .
+git commit -m "First version of Bruh Jjaemu"
+git remote add origin [Link repo của bạn]
+git push -u origin main
+Kích hoạt trang web: * Vào Settings của Repo trên GitHub -> Pages.
+Tại mục Branch, chọn main và nhấn Save.
+Link game: https://[ten-github].github.io/bruh-jjaemu/
+* Cách 2: Triển khai bằng Vercel (Cực nhanh - Kéo thả)
+Nếu bạn không rành Git, hãy dùng Vercel:
+** Truy cập Vercel.com và đăng nhập.
+Kéo thư mục project từ máy tính (thư mục chứa file index.html) và thả trực tiếp vào giao diện upload của Vercel.
+Hệ thống sẽ tự động cấp cho bạn một tên miền .vercel.app để truy cập ngay.
+* Cách 3: Chạy thử nhanh qua IntelliJ Local Server
+Nếu bạn muốn demo cho bạn bè xem ngay tại máy:
+Mở file index.html.
+Rê chuột vào góc trên bên phải màn hình code, xuất hiện các icon trình duyệt (Chrome, Firefox).
+Click vào icon Chrome. IntelliJ sẽ tự tạo một Server ảo có địa chỉ dạng http://localhost:63342/... để bạn chơi thử.
