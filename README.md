@@ -262,7 +262,7 @@ Dự án được phát triển trên trình soạn thảo **Visual Studio Code*
 
 Sau khi hoàn thiện mã nguồn, ứng dụng có thể được triển khai lên môi trường internet thông qua các phương thức sau:
 
-#### Cách 1: Triển khai qua GitHub Pages (Khuyên dùng)
+## Cách 1: Triển khai qua GitHub Pages (Khuyên dùng)
 Đây là phương thức chuyên nghiệp nhất để lưu trữ và chia sẻ game miễn phí:
 1.  **Khởi tạo Git:** Mở Terminal (`Ctrl + \``) trong VS Code và thực thi:
     ```bash
@@ -275,13 +275,19 @@ Sau khi hoàn thiện mã nguồn, ứng dụng có thể được triển khai 
 2.  **Kích hoạt:** Truy cập **Settings** của Repository trên GitHub -> **Pages**. Tại mục **Branch**, chọn `main` và nhấn **Save**.
 3.  **Truy cập:** Web sẽ khả dụng tại: `https://[username].github.io/[repo-name]/`
 
-#### Cách 2: Triển khai nhanh bằng Netlify / Vercel
+## Cách 2: Triển khai nhanh bằng Netlify / Vercel
 Dành cho việc demo nhanh mà không cần thao tác với lệnh Git:
 * **Netlify Drop:** Truy cập [app.netlify.com/drop](https://app.netlify.com/drop), kéo thư mục dự án (chứa file `index.html`) và thả vào giao diện web.
 * **Vercel:** Đăng nhập Vercel.com và liên kết với tài khoản GitHub để tự động triển khai mỗi khi có cập nhật mới.
 
-#### Cách 3: Chạy thử tại Localhost qua Live Server
+## Cách 3: Chạy thử tại Localhost qua Live Server
 Để kiểm tra tính năng trong quá trình code:
 1.  Chuột phải vào file `index.html`.
 2.  Chọn **Open with Live Server**.
-3.  Trình duyệt sẽ tự động mở tại địa chỉ mặc định `http://127.0.0.1:5500/`.
+3.  Trình duyệt sẽ tự động mở tại địa chỉ mặc định `http://127.0.0.1:8080/`.
+
+## Cách 4: Chạy trực tiếp trong Visual Studio Code
+Dành cho người lập trình đang mở project:
+1. Tìm MySillyBestieApplication trong project.
+2. Nhấn nút Run Java ở góc trên.
+3. Mở `http://127.0.0.1:8080/` trong trình duyệt web.
