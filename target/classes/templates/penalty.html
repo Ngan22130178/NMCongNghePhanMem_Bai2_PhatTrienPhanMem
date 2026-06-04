@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="My Silly Bestie – Bạn đã bị phạt! Thú cưng của bạn không còn kiên nhẫn nữa rồi!"/>
+    <title th:text="${pageTitle}">My Silly Bestie – Game Over!</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+
+    <!-- Âm thanh phạt -->
+    <audio id="audio-penalty" th:src="@{/assets/audio/penalty.mp3}" preload="auto" autoplay></audio>
+</head>
+<body>
+
+<div class="penalty-container">
+
+    <!-- Tiêu đề -->
+    <div class="page-header" style="padding-top: 2rem;">
+        <h1>😾 Oops!</h1>
+    </div>
+
+    <!-- Hình ảnh thú cưng đang nổi giận -->
+    <img th:src="@{/assets/images/pets/{img}(img=${gameSession.currentPet.imagePath})}"
+         th:alt="${gameSession.currentPet.name}"
+         class="penalty-pet"
+         onerror="this.src='/assets/images/pets/default.png'"/>
+
+    <!-- Thông báo -->
+    <div class="glass-card" style="padding: 2rem; margin-bottom: 2rem;">
+        <p class="penalty-title" th:text="${gameSession.currentPet.name} + ' nổi giận rồi!'">Thú cưng nổi giận!</p>
+        <p class="penalty-msg">
+            Bạn đã trêu quá giới hạn chịu đựng của
+            <strong th:text="${gameSession.currentPet.name}">thú cưng</strong>!
+            Chỉ số Nghi ngờ đã đạt 100% và thú cưng quyết định đáp trả bạn một cú "nhớ đời"! 😤
+        </p>
+
+        <!-- Chỉ số lần chơi vừa rồi -->
+        <div class="penalty-stats">
+            <div class="stat-badge happiness">
+                😊 Hạnh phúc: <span th:text="${gameSession.happiness}">0</span>%
+            </div>
+            <div class="stat-badge suspicion">
+                😤 Nghi ngờ: <span th:text="${gameSession.suspicion}">100</span>%
+            </div>
+        </div>
+    </div>
+
+    <!-- Nút hành động -->
+    <div class="penalty-actions">
+        <a th:href="@{/game(petId=${gameSession.currentPet.id})}" class="btn btn-primary">
+            🔄 Chơi lại với <span th:text="${gameSession.currentPet.name}">thú cưng này</span>
+        </a>
+        <a th:href="@{/game/restart}" class="btn btn-care">
+            🏠 Chọn thú cưng khác
+        </a>
+    </div>
+
+</div>
+
+<!-- ===== CONFETTI / PARTICLES ===== -->
+<div class="particle" style="width:12px;height:12px;background:#ff6b9d;left:15%;animation-duration:7s;"></div>
+<div class="particle" style="width:8px;height:8px;background:#ffd166;left:40%;animation-duration:9s;animation-delay:1s;"></div>
+<div class="particle" style="width:10px;height:10px;background:#c77dff;left:70%;animation-duration:8s;animation-delay:0.5s;"></div>
+
+<script>
+    // Hiệu ứng rung màn hình khi vào trang phạt
+    document.body.style.animation = 'screenShake 0.5s ease';
+    document.body.style.animationIterationCount = '3';
+</script>
+<style>
+    @keyframes screenShake {
+        0%, 100% { transform: translateX(0); }
+        25%       { transform: translateX(-8px) rotate(-1deg); }
+        75%       { transform: translateX(8px) rotate(1deg); }
+    }
+</style>
+
+</body>
+</html>

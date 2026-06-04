@@ -10,7 +10,8 @@ public class PetEntity {
 
     public PetEntity() {}
 
-    public PetEntity(String id, String name, String description, String imagePath, String voiceSfx, int difficulty) {
+    public PetEntity(String id, String name, String description,
+                     String imagePath, String voiceSfx, int difficulty) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -19,51 +20,26 @@ public class PetEntity {
         this.difficulty = difficulty;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getImagePath() { return imagePath; }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getVoiceSfx() { return voiceSfx; }
+    public void setVoiceSfx(String voiceSfx) { this.voiceSfx = voiceSfx; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public int getDifficulty() { return difficulty; }
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getVoiceSfx() {
-        return voiceSfx;
-    }
-
-    public void setVoiceSfx(String voiceSfx) {
-        this.voiceSfx = voiceSfx;
-    }
-
-    public int getDifficulty() {
-        return difficulty;
-    }
-
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
+    /** Trả về biểu tượng ngôi sao tương ứng mức độ khó để hiển thị trên giao diện */
+    public String getDifficultyStars() {
+        return "⭐".repeat(difficulty);
     }
 }
