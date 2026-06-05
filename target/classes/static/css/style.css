@@ -202,7 +202,7 @@ body > * { position: relative; z-index: 1; }
     gap: 1.5rem;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 1.5rem 2rem;
+    padding: 1.5rem 1.5rem 2rem;
 }
 
 /* --- Status Bar (top full width) --- */
@@ -411,6 +411,33 @@ body > * { position: relative; z-index: 1; }
 .tool-btn .tool-icon { font-size: 1.4rem; }
 .tool-btn .tool-info { flex: 1; }
 .tool-btn .tool-info small { display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 600; }
+
+/* Ảnh icon dụng cụ thực */
+.tool-icon-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    border-radius: 8px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+.tool-btn:hover .tool-icon-img {
+    transform: rotate(-10deg) scale(1.15);
+}
+
+/* Cảnh báo Suspicion */
+.suspicion-alert {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: rgba(255,107,157,0.15);
+    border-radius: 10px;
+    border: 1px solid rgba(255,107,157,0.4);
+    font-size: 0.85rem;
+    color: #ff6b9d;
+    font-weight: 700;
+    text-align: center;
+    animation: suspicionPulse 0.5s ease infinite alternate;
+}
 
 /* --- Action Message --- */
 .action-msg {

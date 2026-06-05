@@ -6,12 +6,6 @@
     <meta name="description" content="My Silly Bestie – Tương tác và chăm sóc thú cưng ảo của bạn!"/>
     <title th:text="${pageTitle}">My Silly Bestie – Chơi Game</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
-
-    <!-- Chuẩn bị âm thanh phản hồi -->
-    <audio id="audio-care"  th:src="@{/assets/audio/care.mp3}"  preload="auto"></audio>
-    <audio id="audio-prank" th:src="@{/assets/audio/prank.mp3}" preload="auto"></audio>
-    <audio id="audio-pet"   th:src="@{/assets/audio/__pet__}"   preload="auto"
-           th:attr="src=@{/assets/audio/{sfx}(sfx=${gameSession.currentPet.voiceSfx})}"></audio>
 </head>
 <body>
 
@@ -102,8 +96,12 @@
             <div th:each="tool : ${tools}" th:if="${tool.care}">
                 <form method="post" th:action="@{/game/interact}">
                     <input type="hidden" name="toolId" th:value="${tool.id}"/>
-                    <button type="submit" class="tool-btn btn-care-tool">
-                        <span class="tool-icon">🪮</span>
+                    <button type="submit" class="tool-btn">
+                        <img th:src="@{/assets/images/tools/{img}(img=${tool.imagePath})}"
+                             th:alt="${tool.name}"
+                             class="tool-icon-img"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'"/>
+                        <span class="tool-icon-fallback" style="display:none; font-size:1.4rem;">🪮</span>
                         <span class="tool-info">
                             <span th:text="${tool.name}">Lược</span>
                             <small th:text="'+' + ${tool.happinessRate} + ' Hạnh phúc'">+15 Hạnh phúc</small>
@@ -119,8 +117,12 @@
             <div th:each="tool : ${tools}" th:if="${tool.prank}">
                 <form method="post" th:action="@{/game/interact}">
                     <input type="hidden" name="toolId" th:value="${tool.id}"/>
-                    <button type="submit" class="tool-btn btn-prank-tool">
-                        <span class="tool-icon">🪶</span>
+                    <button type="submit" class="tool-btn">
+                        <img th:src="@{/assets/images/tools/{img}(img=${tool.imagePath})}"
+                             th:alt="${tool.name}"
+                             class="tool-icon-img"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'"/>
+                        <span class="tool-icon-fallback" style="display:none; font-size:1.4rem;">🪶</span>
                         <span class="tool-info">
                             <span th:text="${tool.name}">Lông vũ</span>
                             <small th:text="'+' + ${tool.suspicionRate} + ' Nghi ngờ'"
@@ -131,35 +133,19 @@
             </div>
         </div>
 
-        <!-- Cảnh báo khi Suspicion > 60 -->
-        <div th:if="${gameSession.suspicion >= 60}"
-             style="margin-top:1rem; padding:0.8rem; background:rgba(255,107,157,0.15); border-radius:10px; border:1px solid rgba(255,107,157,0.3); font-size:0.85rem; color:#ff6b9d; font-weight:700; text-align:center; animation:suspicionPulse 0.5s ease infinite alternate;">
+        <!-- Cảnh báo khi Suspicion >= 60 -->
+        <div th:if="${gameSession.suspicion >= 60}" class="suspicion-alert">
             ⚠️ Cảnh báo! Thú cưng sắp nổi giận rồi!
         </div>
     </div>
 
 </div><!-- end game-layout -->
 
-<!-- ===== JAVASCRIPT: Phát âm thanh sau tương tác ===== -->
+<!-- Inject trạng thái game vào JS -->
 <script th:inline="javascript">
     const lastReaction = /*[[${gameSession.lastReaction}]]*/ 'idle';
-
-    function playSound(id) {
-        const audio = document.getElementById(id);
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch(() => {}); // Bỏ qua lỗi autoplay
-        }
-    }
-
-    window.addEventListener('DOMContentLoaded', function() {
-        if (lastReaction === 'happy') {
-            playSound('audio-care');
-        } else if (lastReaction === 'suspicious' || lastReaction === 'angry') {
-            playSound('audio-prank');
-        }
-    });
 </script>
+<script th:src="@{/js/script.js}"></script>
 
 </body>
 </html>

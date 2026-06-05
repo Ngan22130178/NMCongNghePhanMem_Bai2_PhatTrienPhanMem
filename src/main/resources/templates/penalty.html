@@ -6,9 +6,6 @@
     <meta name="description" content="My Silly Bestie – Bạn đã bị phạt! Thú cưng của bạn không còn kiên nhẫn nữa rồi!"/>
     <title th:text="${pageTitle}">My Silly Bestie – Game Over!</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
-
-    <!-- Âm thanh phạt -->
-    <audio id="audio-penalty" th:src="@{/assets/audio/penalty.mp3}" preload="auto" autoplay></audio>
 </head>
 <body>
 
@@ -57,23 +54,13 @@
 
 </div>
 
-<!-- ===== CONFETTI / PARTICLES ===== -->
+<!-- ===== PARTICLES ===== -->
 <div class="particle" style="width:12px;height:12px;background:#ff6b9d;left:15%;animation-duration:7s;"></div>
 <div class="particle" style="width:8px;height:8px;background:#ffd166;left:40%;animation-duration:9s;animation-delay:1s;"></div>
 <div class="particle" style="width:10px;height:10px;background:#c77dff;left:70%;animation-duration:8s;animation-delay:0.5s;"></div>
 
-<script>
-    // Hiệu ứng rung màn hình khi vào trang phạt
-    document.body.style.animation = 'screenShake 0.5s ease';
-    document.body.style.animationIterationCount = '3';
-</script>
-<style>
-    @keyframes screenShake {
-        0%, 100% { transform: translateX(0); }
-        25%       { transform: translateX(-8px) rotate(-1deg); }
-        75%       { transform: translateX(8px) rotate(1deg); }
-    }
-</style>
+<!-- Script rung màn hình + âm thanh phạt -->
+<script th:src="@{/js/script.js}"></script>
 
 </body>
 </html>
