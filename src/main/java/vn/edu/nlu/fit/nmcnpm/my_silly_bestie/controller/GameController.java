@@ -14,10 +14,6 @@ import vn.edu.nlu.fit.nmcnpm.my_silly_bestie.model.GameSession;
 
 import java.util.List;
 
-/**
- * Controller MVC chính của game.
- * Điều phối tất cả các yêu cầu từ trình duyệt và trả về tên template Thymeleaf.
- */
 @Controller
 public class GameController {
 
@@ -28,27 +24,26 @@ public class GameController {
     private ToolDAO toolDAO;
 
     // ============================================================
-    // GET / → Trang chủ: Hiển thị danh sách thú cưng để chọn
+    // GET / → Trang chủ
     // ============================================================
     @GetMapping("/")
     public String index(Model model) {
         List<PetEntity> pets = petDAO.findAll();
         model.addAttribute("pets", pets);
-        model.addAttribute("pageTitle", "My Silly Bestie – Chọn Người Bạn Của Bạn!");
-        return "index"; // → src/main/resources/templates/index.html
+        model.addAttribute("pageTitle", "My Silly Bestie – Chọn Thú Cưng");
+        return "index";
     }
 
     // ============================================================
-    // GET /game?petId=xxx → Bắt đầu lượt chơi với thú cưng đã chọn
+    // GET /game → Bắt đầu chơi
     // ============================================================
     @GetMapping("/game")
     public String startGame(@RequestParam String petId, HttpSession session, Model model) {
         PetEntity pet = petDAO.findById(petId);
         if (pet == null) {
-            return "redirect:/"; // Quay lại trang chủ nếu không tìm thấy thú cưng
+            return "redirect:/";
         }
 
-        // Khởi tạo hoặc reset session game
         GameSession gameSession = new GameSession();
         gameSession.startNewGame(pet);
         session.setAttribute("gameSession", gameSession);
@@ -56,12 +51,34 @@ public class GameController {
         List<ToolEntity> tools = toolDAO.findAll();
         model.addAttribute("gameSession", gameSession);
         model.addAttribute("tools", tools);
-        model.addAttribute("pageTitle", "My Silly Bestie – Chơi cùng " + pet.getName());
-        return "game"; // → src/main/resources/templates/game.html
+        model.addAttribute("pageTitle", "Chơi cùng " + pet.getName());
+        return "game";
     }
 
     // ============================================================
-    // POST /game/interact → Người chơi dùng dụng cụ tương tác
+    // POST /game/interact → Tương tác (CHĂM SÓC / TRÊU CHỌC)
+    // ============================================================
+    @PostMapping("/game/interact")
+    public String interact(@RequestParam String toolId, HttpSession session, RedirectAttributes ra) {
+        GameSession gameSession = (GameSession) session.getAttribute("gameSession");
+        if (gameSession == null || gameSession.getCurrentPet() == null) {
+            return "redirect:/";
+        }
+
+        ToolEntity tool = toolDAO.findById(toolId);
+        if (tool != null) {
+            gameSession.applyInteraction(tool);
+            session.setAttribute("gameSession", gameSession);
+
+            if (gameSession.isGameOver()) {
+                return "redirect:/game/penalty";
+            }
+        }
+        return "redirect:/game/play";
+    }
+
+    // ============================================================
+    // POST /game/buy → Mua đồ
     // ============================================================
     @PostMapping("/game/buy")
     public String buyItem(@RequestParam String toolId, HttpSession session, RedirectAttributes ra) {
@@ -69,18 +86,17 @@ public class GameController {
         if (gs == null) return "redirect:/";
 
         ToolEntity tool = toolDAO.findById(toolId);
-        if (tool != null && gs.getGold() >= 30) {   // Giá mẫu = 30 vàng
-            gs.setGold(gs.getGold() - 30);
-            // Có thể thêm inventory sau
-            ra.addFlashAttribute("message", "Đã mua " + tool.getName() + " thành công!");
+        if (tool != null && gs.getGold() >= 35) {
+            gs.setGold(gs.getGold() - 35);
+            ra.addFlashAttribute("success", "✅ Đã mua " + tool.getName());
         } else {
-            ra.addFlashAttribute("error", "Không đủ vàng!");
+            ra.addFlashAttribute("error", "❌ Không đủ vàng!");
         }
         return "redirect:/game/play";
     }
 
     // ============================================================
-    // GET /game/play → Trang game sau khi tương tác (redirect target)
+    // GET /game/play → Hiển thị lại màn hình game
     // ============================================================
     @GetMapping("/game/play")
     public String playGame(HttpSession session, Model model) {
@@ -92,26 +108,23 @@ public class GameController {
         List<ToolEntity> tools = toolDAO.findAll();
         model.addAttribute("gameSession", gameSession);
         model.addAttribute("tools", tools);
-        model.addAttribute("pageTitle", "My Silly Bestie – Chơi cùng " + gameSession.getCurrentPet().getName());
-        return "game"; // Dùng lại template game.html
+        return "game";
     }
 
     // ============================================================
-    // GET /game/penalty → Màn hình phạt khi Suspicion >= 100%
+    // GET /game/penalty
     // ============================================================
     @GetMapping("/game/penalty")
     public String penalty(HttpSession session, Model model) {
         GameSession gameSession = (GameSession) session.getAttribute("gameSession");
-        if (gameSession == null || gameSession.getCurrentPet() == null) {
-            return "redirect:/";
-        }
+        if (gameSession == null) return "redirect:/";
+
         model.addAttribute("gameSession", gameSession);
-        model.addAttribute("pageTitle", "My Silly Bestie – Oops! Bạn bị phạt rồi!");
-        return "penalty"; // → src/main/resources/templates/penalty.html
+        return "penalty";
     }
 
     // ============================================================
-    // GET /game/restart → Xóa session và chọn thú cưng lại từ đầu
+    // GET /game/restart
     // ============================================================
     @GetMapping("/game/restart")
     public String restart(HttpSession session) {
