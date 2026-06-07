@@ -21,6 +21,7 @@ import java.io.Serializable;
  *  - UC4: Thực hiện Chăm sóc (Care Mode)
  *    → applyInteraction() xử lý logic khi dụng cụ CARE được sử dụng
  *    → Tăng happiness, giảm suspicion, cập nhật lastReaction="happy"
+ *    → Khi happiness >= 100: đặt victory=true, lastReaction="victory"
  * ============================================================
  */
 public class GameSession implements Serializable {
@@ -29,13 +30,15 @@ public class GameSession implements Serializable {
     private ToolEntity selectedTool;   // Dụng cụ người chơi đang cầm (UC2/UC3/UC4)
     private int happiness;             // Chỉ số Hạnh phúc (0 - 100) – tăng khi UC4
     private int suspicion;             // Chỉ số Nghi ngờ (0 - 100) – tăng khi UC3
-    private String lastReaction;       // Phản ứng mới nhất: "idle"|"happy"|"suspicious"|"angry"
+    private String lastReaction;       // Phản ứng mới nhất: "idle"|"happy"|"suspicious"|"angry"|"victory"
     private boolean gameOver;          // true khi suspicion >= 100 (UC3 kết thúc bằng Penalty)
+    private boolean victory;           // true khi happiness >= 100 (UC4 kết thúc bằng Victory)
 
     public GameSession() {
         this.happiness = 50;
         this.suspicion = 0;
         this.gameOver = false;
+        this.victory = false;
         this.lastReaction = "idle";
     }
 
@@ -49,6 +52,7 @@ public class GameSession implements Serializable {
         this.happiness = 50;
         this.suspicion = 0;
         this.gameOver = false;
+        this.victory = false;
         this.lastReaction = "idle";
     }
 
@@ -62,6 +66,8 @@ public class GameSession implements Serializable {
      *  - Tăng happiness += tool.happinessRate (tối đa 100)
      *  - Giảm suspicion -= 5 (tối thiểu 0) → chăm sóc làm dịu nghi ngờ
      *  - Đặt lastReaction = "happy" → frontend hiển thị animation vui + âm thanh ding
+     *  - Nếu happiness >= 100: victory = true, lastReaction = "victory"
+     *    → GameController redirect đến /game/victory
      *
      * Logic UC3 (PRANK – Trêu chọc):
      *  - Tăng suspicion += tool.suspicionRate (tối đa 100)
@@ -94,6 +100,13 @@ public class GameSession implements Serializable {
             this.lastReaction = "suspicious";
         }
 
+        // ── UC4 kết thúc: Victory khi Happiness >= 100% ──────────────────
+        if (this.happiness >= 100) {
+            this.victory = true;
+            // Phản ứng đặc biệt: thú cưng cực kỳ hạnh phúc → redirect /game/victory
+            this.lastReaction = "victory";
+        }
+
         // ── UC3 kết thúc: Game Over khi Suspicion >= 100% ────────────────
         if (this.suspicion >= 100) {
             this.gameOver = true;
@@ -120,6 +133,9 @@ public class GameSession implements Serializable {
 
     public boolean isGameOver() { return gameOver; }
     public void setGameOver(boolean gameOver) { this.gameOver = gameOver; }
+
+    public boolean isVictory() { return victory; }
+    public void setVictory(boolean victory) { this.victory = victory; }
 
     /** Tính % tỷ lệ thanh Happiness để CSS width */
     public int getHappinessPercent() { return happiness; }

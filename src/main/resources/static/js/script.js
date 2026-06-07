@@ -116,6 +116,47 @@ function playPenaltySound() {
     } catch (e) { /* bỏ qua */ }
 }
 
+/**
+ * [UC4 kết thúc – VICTORY] Âm thanh "fanfare" mừng chiến thắng
+ * Phát khi Happiness >= 100% và thú cưng cực hạnh phúc.
+ * Âm giai điêu vui mừng tăng dần: C5→E5→G5→C6→E6
+ */
+function playVictorySound() {
+    try {
+        const ctx = getAudioCtx();
+        // Giai điệu dâng cao – C major chord arpeggio
+        const notes = [523, 659, 784, 1047, 1319];
+        notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            const startTime = ctx.currentTime + i * 0.15;
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(0.35, startTime + 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.6);
+            osc.start(startTime);
+            osc.stop(startTime + 0.7);
+        });
+        // Bổ sung "sparkle" – cao độ rất cao
+        setTimeout(() => {
+            const osc2 = ctx.createOscillator();
+            const gain2 = ctx.createGain();
+            osc2.connect(gain2);
+            gain2.connect(ctx.destination);
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(2093, ctx.currentTime); // C7
+            osc2.frequency.exponentialRampToValueAtTime(1397, ctx.currentTime + 0.3); // F6
+            gain2.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+            osc2.start(ctx.currentTime);
+            osc2.stop(ctx.currentTime + 0.5);
+        }, 750);
+    } catch (e) { /* bỏ qua */ }
+}
+
 // ============================================================
 // 2. TỰ ĐỘNG PHÁT ÂM THANH DỰA TRÊN TRẠNG THÁI GAME
 //    lastReaction được inject từ Thymeleaf inline JS trong game.html:
@@ -135,6 +176,10 @@ function initGameAudio() {
     // [UC3 Penalty] Phát âm thanh crash khi reaction = "angry"
     else if (lastReaction === 'angry') {
         playPenaltySound();
+    }
+    // [UC4 Victory] Phát âm thanh fanfare khi reaction = "victory"
+    else if (lastReaction === 'victory') {
+        playVictorySound();
     }
 }
 
@@ -208,10 +253,10 @@ function initCustomCursor() {
     });
 }
 
-// ============================================================
-// 4. [UC4 – CHĂM SÓC] HIỆU ỨNG CONFETTI KHI CARE (Hạnh phúc tăng)
-//    12 hạt màu bay ra từ trung tâm màn hình khi lastReaction="happy"
-// ============================================================
+/**
+ * [UC4 – CHĂM SÓC] HIỆU ỨNG CONFETTI KHI CARE (Hạnh phúc tăng)
+ *    12 hạt màu bay ra từ trung tâm màn hình khi lastReaction="happy"
+ */
 function spawnConfetti() {
     const colors = ['#c77dff', '#ff6b9d', '#ffd166', '#06d6a0', '#4cc9f0'];
     for (let i = 0; i < 12; i++) {
@@ -241,6 +286,46 @@ function spawnConfetti() {
         ], {
             duration: 600 + Math.random() * 400,
             easing: 'cubic-bezier(0,0.9,0.57,1)',
+            fill: 'forwards'
+        }).onfinish = () => dot.remove();
+    }
+}
+
+/**
+ * [UC4 kết thúc – VICTORY] HIỆU ỨNG CONFETTI LIÊN TỤC
+ *    Phát mưa confetti liên tục khi tải trang victory.html
+ *    Mạnh hơn spawnConfetti() – nhiều hạt hơn, vòng lặp liên tục
+ */
+function spawnVictoryConfetti() {
+    const colors = ['#ffd166', '#06d6a0', '#c77dff', '#ff6b9d', '#4cc9f0', '#ffffff'];
+    const shapes = ['50%', '0%']; // circle, square
+    for (let i = 0; i < 30; i++) {
+        const dot = document.createElement('div');
+        const size = 6 + Math.random() * 10;
+        dot.style.cssText = `
+            position: fixed;
+            width: ${size}px;
+            height: ${size}px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            border-radius: ${shapes[Math.floor(Math.random() * shapes.length)]};
+            pointer-events: none;
+            z-index: 9999;
+            left: ${Math.random() * 100}%;
+            top: -20px;
+        `;
+        document.body.appendChild(dot);
+
+        const fallDuration = 1800 + Math.random() * 2000;
+        const delay = Math.random() * 800;
+        const targetX = (Math.random() - 0.5) * 200;
+
+        dot.animate([
+            { transform: `translateY(0) translateX(0) rotate(0deg)`, opacity: 1 },
+            { transform: `translateY(110vh) translateX(${targetX}px) rotate(${360 + Math.random()*720}deg)`, opacity: 0.3 }
+        ], {
+            duration: fallDuration,
+            delay: delay,
+            easing: 'ease-in',
             fill: 'forwards'
         }).onfinish = () => dot.remove();
     }
@@ -280,5 +365,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.penalty-container')) {
         shakeScreen();
         playPenaltySound();
+    }
+
+    // [UC4 Victory] Nếu đang ở trang victory → mưa confetti + âm thanh fanfare
+    if (document.querySelector('.victory-container')) {
+        playVictorySound();
+        // Bắn confetti nhiều đợt
+        spawnVictoryConfetti();
+        setTimeout(spawnVictoryConfetti, 1000);
+        setTimeout(spawnVictoryConfetti, 2000);
     }
 });

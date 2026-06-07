@@ -65,6 +65,23 @@ class GameSessionTest {
     }
 
     @Test
+    void testApplyInteraction_CareTool_Victory() {
+        gameSession.startNewGame(samplePet);
+        // Nâng happiness lên 85 trước
+        gameSession.setHappiness(85);
+        ToolEntity careTool = new ToolEntity("dryer", "Máy sấy", "Chăm sóc", "img/dryer.png", "CARE", 0, 20);
+
+        gameSession.applyInteraction(careTool);
+
+        // Happiness: 85 + 20 = 105 → giới hạn 100
+        assertEquals(100, gameSession.getHappiness());
+        // Kết quả: trạng thái thắng và phản ứng đặc biệt
+        assertTrue(gameSession.isVictory());
+        assertEquals("victory", gameSession.getLastReaction());
+        assertFalse(gameSession.isGameOver());
+    }
+
+    @Test
     void testApplyInteraction_CareTool_Limits() {
         gameSession.startNewGame(samplePet);
         ToolEntity careTool = new ToolEntity("comb", "Lược chải", "Chải lông", "img/comb.png", "CARE", 0, 60);

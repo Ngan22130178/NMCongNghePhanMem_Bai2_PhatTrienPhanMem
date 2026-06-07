@@ -84,6 +84,7 @@
                 <span th:case="'happy'">😻</span>
                 <span th:case="'suspicious'">😾</span>
                 <span th:case="'angry'">💢</span>
+                <span th:case="'victory'">🥰</span>
                 <span th:case="*">💤</span>
             </span>
         </div>
@@ -160,6 +161,7 @@
 <!-- Inject trạng thái game vào JS -->
 <script th:inline="javascript">
     const lastReaction = /*[[${gameSession.lastReaction}]]*/ 'idle';
+    const isVictory    = /*[[${gameSession.victory}]]*/ false;
 </script>
 <script th:src="@{/js/script.js}"></script>
 

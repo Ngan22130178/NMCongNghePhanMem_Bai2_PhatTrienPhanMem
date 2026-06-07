@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  TEMPLATE: victory.html – Màn hình Chiến Thắng
+  ============================================================
+  LIÊN QUAN ĐẾN:
+   - UC4: Thực hiện Chăm sóc thú cưng – Kết thúc thắng lợi
+     → Hiển thị khi Happiness >= 100%
+     → Thú cưng cực kỳ hạnh phúc, người chơi hoàn thành UC4
+  ============================================================
+-->
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="My Silly Bestie – Bạn đã chiến thắng! Thú cưng của bạn đang cực kỳ hạnh phúc!"/>
+    <title th:text="${pageTitle}">My Silly Bestie – Chiến Thắng!</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div class="victory-container" id="victoryContainer">
+
+    <!-- Tiêu đề -->
+    <div class="page-header" style="padding-top: 2rem;">
+        <h1>🎉 Đại Thắng!</h1>
+        <p>Thú cưng của bạn đang cực kỳ hạnh phúc!</p>
+    </div>
+
+    <!-- Hình ảnh thú cưng đang vui mừng -->
+    <img th:src="@{/assets/images/pets/{img}(img=${gameSession.currentPet.imagePath})}"
+         th:alt="${gameSession.currentPet.name}"
+         class="victory-pet"
+         id="victoryPet"
+         onerror="this.src='/assets/images/pets/default.png'"/>
+
+    <!-- Thông báo chiến thắng -->
+    <div class="glass-card" style="padding: 2rem; margin-bottom: 2rem;">
+        <p class="victory-title" th:text="${gameSession.currentPet.name} + ' cực kỳ hạnh phúc!'">Thú cưng hạnh phúc!</p>
+        <p class="victory-msg">
+            Bạn đã chăm sóc
+            <strong th:text="${gameSession.currentPet.name}">thú cưng</strong>
+            thật tốt! Chỉ số Hạnh phúc đã đạt 100% và thú cưng dành cho bạn
+            nụ hôn thật ấm áp! 🥰✨
+        </p>
+
+        <!-- Chỉ số lần chơi vừa rồi -->
+        <div class="penalty-stats">
+            <div class="stat-badge happiness">
+                😊 Hạnh phúc: <span th:text="${gameSession.happiness}">100</span>%
+            </div>
+            <div class="stat-badge suspicion">
+                😤 Nghi ngờ: <span th:text="${gameSession.suspicion}">0</span>%
+            </div>
+        </div>
+    </div>
+
+    <!-- Nút hành động -->
+    <div class="penalty-actions">
+        <a th:href="@{/game(petId=${gameSession.currentPet.id})}" class="btn btn-primary">
+            🔄 Chơi lại với <span th:text="${gameSession.currentPet.name}">thú cưng này</span>
+        </a>
+        <a th:href="@{/game/restart}" class="btn btn-care">
+            🏠 Chọn thú cưng khác
+        </a>
+    </div>
+
+</div>
+
+<!-- ===== PARTICLES CHIẾN THẮNG ===== -->
+<div class="particle" style="width:14px;height:14px;background:#ffd166;left:10%;animation-duration:6s;"></div>
+<div class="particle" style="width:10px;height:10px;background:#06d6a0;left:25%;animation-duration:8s;animation-delay:0.5s;"></div>
+<div class="particle" style="width:8px;height:8px;background:#c77dff;left:45%;animation-duration:7s;animation-delay:1s;"></div>
+<div class="particle" style="width:12px;height:12px;background:#ff6b9d;left:65%;animation-duration:9s;animation-delay:0.3s;"></div>
+<div class="particle" style="width:10px;height:10px;background:#4cc9f0;left:80%;animation-duration:7.5s;animation-delay:1.5s;"></div>
+<div class="particle" style="width:6px;height:6px;background:#ffd166;left:92%;animation-duration:8.5s;animation-delay:0.8s;"></div>
+
+<!-- Script hiệu ứng và âm thanh victory -->
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

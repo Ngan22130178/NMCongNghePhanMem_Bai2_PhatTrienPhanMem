@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: vn.edu.nlu.fit.nmcnpm.my_silly_bestie.MySillyBestieApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.216 s -- in vn.edu.nlu.fit.nmcnpm.my_silly_bestie.MySillyBestieApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.088 s -- in vn.edu.nlu.fit.nmcnpm.my_silly_bestie.MySillyBestieApplicationTests

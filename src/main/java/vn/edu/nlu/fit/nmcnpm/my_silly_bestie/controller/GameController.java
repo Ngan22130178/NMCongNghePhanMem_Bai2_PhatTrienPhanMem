@@ -26,6 +26,7 @@ import java.util.List;
  *  GET  /game?petId=...  → UC1+UC2: Bắt đầu phiên chơi
  *  POST /game/interact   → UC3 & UC4: Xử lý tương tác (CARE hoặc PRANK)
  *  GET  /game/play       → Hiển thị lại game sau tương tác
+ *  GET  /game/victory    → UC4 kết thúc: Màn hình thắng khi Hạnh phúc đạt 100%
  *  GET  /game/penalty    → UC3 kết thúc: Màn hình phạt khi thua
  *  GET  /game/restart    → UC7: Reset và chọn thú cưng lại
  * ============================================================
@@ -124,6 +125,11 @@ public class GameController {
             session.setAttribute("gameSession", gameSession);
         }
 
+        // [UC4] Kiểm tra điều kiện Victory (Happiness >= 100%)
+        if (gameSession.isVictory()) {
+            return "redirect:/game/victory"; // → Màn hình chiến thắng
+        }
+
         // [UC3] Kiểm tra điều kiện Game Over (Suspicion >= 100%)
         if (gameSession.isGameOver()) {
             return "redirect:/game/penalty"; // → Màn hình phạt
@@ -172,6 +178,26 @@ public class GameController {
         model.addAttribute("gameSession", gameSession);
         model.addAttribute("pageTitle", "My Silly Bestie – Oops! Bạn bị phạt rồi!");
         return "penalty"; // → src/main/resources/templates/penalty.html
+    }
+
+    // ============================================================
+    // [UC4 kết thúc] GET /game/victory → Màn hình chiến thắng khi Happiness >= 100%
+    // ============================================================
+    /**
+     * UC4 – Kết quả Victory:
+     * Hiển thị màn hình "Đại thắng!" khi thú cưng cực kỳ hạnh phúc (Happiness >= 100%).
+     * Giao diện hiển thị tổng kết happiness/suspicion cuối cùng
+     * và 2 nút: Chơi lại / Chọn thú cưng khác.
+     */
+    @GetMapping("/game/victory")
+    public String victory(HttpSession session, Model model) {
+        GameSession gameSession = (GameSession) session.getAttribute("gameSession");
+        if (gameSession == null || gameSession.getCurrentPet() == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("gameSession", gameSession);
+        model.addAttribute("pageTitle", "My Silly Bestie – 🎉 Chiến Thắng! Thú cưng cực hạnh phúc!");
+        return "victory"; // → src/main/resources/templates/victory.html
     }
 
     // ============================================================
