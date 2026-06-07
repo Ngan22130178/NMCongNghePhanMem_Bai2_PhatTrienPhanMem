@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sơ đồ dự án – My Silly Bestie</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+  h1 { text-align: center; color: #1a1a2e; font-size: 28px; margin-bottom: 10px; }
+  p.note { text-align: center; color: #555; margin-bottom: 30px; font-size: 14px; }
+  .diagram-block {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+  .diagram-block h2 {
+    background: #1a1a2e;
+    color: white;
+    margin: 0;
+    padding: 14px 24px;
+    font-size: 18px;
+  }
+  .diagram-block .caption {
+    background: #e8f4fd;
+    color: #1565c0;
+    padding: 8px 24px;
+    font-size: 13px;
+    border-bottom: 1px solid #c5d8ec;
+  }
+  .svg-container {
+    padding: 20px;
+    text-align: center;
+    background: white;
+    overflow-x: auto;
+  }
+  .svg-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  .btn-print {
+    display: block;
+    width: 200px;
+    margin: 0 auto 30px;
+    padding: 12px 24px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .btn-print:hover { background: #1557b0; }
+  @media print {
+    .btn-print { display: none; }
+    .diagram-block { page-break-inside: avoid; margin-bottom: 20px; }
+    body { background: white; padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🎮 My Silly Bestie – Tất Cả Sơ Đồ</h1>
+<p class="note">📷 Nhấn F11 để full-screen, rồi chụp từng sơ đồ để dán vào Word. Hoặc dùng Ctrl+P để in PDF.</p>
+<button class="btn-print" onclick="window.print()">🖨️ In / Xuất PDF</button>
+
+<!-- SƠ ĐỒ 1: USE CASE -->
+<div class="diagram-block">
+  <h2>📌 Hình 1 – Lược đồ Use Case</h2>
+  <div class="caption">Mục 2 của báo cáo – Lược đồ Use Case tổng quát hệ thống My Silly Bestie</div>
+  <div class="svg-container">
+    <img src="doc/LuocDoUsecase.drawio.svg" alt="Lược đồ Use Case" style="min-width: 800px;">
+  </div>
+</div>
+
+<!-- SƠ ĐỒ 2: KIẾN TRÚC -->
+<div class="diagram-block">
+  <h2>🏗️ Hình 2 – Kiến trúc hệ thống (Physical View / Layered Architecture)</h2>
+  <div class="caption">Mục 3 của báo cáo – Mô hình kiến trúc phân lớp của My Silly Bestie</div>
+  <div class="svg-container">
+    <img src="doc/SoDoKienTruc.drawio.svg" alt="Kiến trúc hệ thống" style="min-width: 800px;">
+  </div>
+</div>
+
+<!-- SƠ ĐỒ 3: SEQUENCE -->
+<div class="diagram-block">
+  <h2>🔄 Hình 3 – Lược đồ Sequence (UC1+UC2 – Chuẩn bị phiên chơi)</h2>
+  <div class="caption">Mục 6 của báo cáo – Lược đồ Sequence cho Use Case đã chọn</div>
+  <div class="svg-container">
+    <img src="doc/SoDoSeq.drawio.svg" alt="Sequence Diagram" style="min-width: 800px;">
+  </div>
+</div>
+
+<!-- SƠ ĐỒ 4: CLASS DIAGRAM -->
+<div class="diagram-block">
+  <h2>📊 Hình 4 – Sơ đồ Class (Class Diagram)</h2>
+  <div class="caption">Mục 8 của báo cáo – Sơ đồ Class tổng quát hệ thống</div>
+  <div class="svg-container">
+    <img src="doc/SoDoLop.drawio.svg" alt="Class Diagram" style="min-width: 800px;">
+  </div>
+</div>
+
+<p style="text-align:center; color:#888; font-size:12px; margin-top:20px;">
+  File gốc SVG tại: d:\BaiTapTrenTruong\Game\NMCongNghePhanMem_Bai2_PhatTrienPhanMem\doc\
+</p>
+
+</body>
+</html>
