@@ -1,13 +1,19 @@
 /**
+ * ============================================================
  * MY SILLY BESTIE – script.js
- * Xử lý:
- *  1. Web Audio API – tạo âm thanh không cần file .mp3
- *  2. Custom Cursor – con trỏ đổi hình khi hover dụng cụ
- *  3. Hiệu ứng hạt confetti nhỏ khi tương tác CARE
+ * Frontend JavaScript cho UC3 (Trêu chọc) và UC4 (Chăm sóc)
+ * ============================================================
+ * Xử lý phía Client:
+ *  1. [UC3+UC4] Web Audio API – Tổng hợp âm thanh không cần file .mp3
+ *  2. [UC2]     Custom Cursor – Con trỏ đổi emoji khi hover dụng cụ
+ *  3. [UC4]     Confetti effect – Hạt vui vẻ khi CARE thành công
+ *  4. [UC3]     Screen shake – Rung màn hình khi Penalty
+ * ============================================================
  */
 
 // ============================================================
 // 1. WEB AUDIO API – Tổng hợp âm thanh trực tiếp từ trình duyệt
+//    (Không cần file .mp3 – hoạt động hoàn toàn client-side)
 // ============================================================
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
@@ -20,8 +26,9 @@ function getAudioCtx() {
 }
 
 /**
- * Tạo âm thanh dịu dàng kiểu "ding" cho CARE
- * Giống tiếng nhạc hộp nhỏ
+ * [UC4 – CHĂM SÓC] Âm thanh dịu dàng kiểu "ding" – nhạc hộp nhỏ
+ * Phát khi người chơi dùng dụng cụ CARE (Lược / Máy Sấy).
+ * Nốt nhạc: C5 (523Hz) → E5 (659Hz) → G5 (784Hz) → C6 (1047Hz)
  */
 function playCareSound() {
     try {
@@ -45,7 +52,9 @@ function playCareSound() {
 }
 
 /**
- * Tạo âm thanh tinh nghịch kiểu "boing" cho PRANK
+ * [UC3 – TRÊU CHỌC] Âm thanh tinh nghịch kiểu "boing"
+ * Phát khi người chơi dùng dụng cụ PRANK (Lông Vũ / Bình Xịt).
+ * Sawtooth wave từ 300Hz xuống 80Hz – cảm giác trêu chọc
  */
 function playPrankSound() {
     try {
@@ -65,12 +74,14 @@ function playPrankSound() {
 }
 
 /**
- * Tạo âm thanh phạt kiểu "crash" cho Penalty
+ * [UC3 kết thúc – PENALTY] Âm thanh "crash" khi thua
+ * Phát khi Suspicion >= 100% và thú cưng nổi giận.
+ * Kết hợp: White noise filtered (trống rung) + Square wave (tiếng "wah")
  */
 function playPenaltySound() {
     try {
         const ctx = getAudioCtx();
-        // Tiếng trống rung
+        // Tiếng trống rung – white noise qua low-pass filter
         const bufferSize = ctx.sampleRate * 0.5;
         const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
         const data = buffer.getChannelData(0);
@@ -90,7 +101,7 @@ function playPenaltySound() {
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
         source.start(ctx.currentTime);
 
-        // Thêm tiếng "wah"
+        // Thêm tiếng "wah" – square wave 200Hz → 50Hz
         const osc2 = ctx.createOscillator();
         const gain2 = ctx.createGain();
         osc2.connect(gain2);
@@ -107,28 +118,35 @@ function playPenaltySound() {
 
 // ============================================================
 // 2. TỰ ĐỘNG PHÁT ÂM THANH DỰA TRÊN TRẠNG THÁI GAME
+//    lastReaction được inject từ Thymeleaf inline JS trong game.html:
+//    const lastReaction = /*[[${gameSession.lastReaction}]]*/ 'idle';
 // ============================================================
 function initGameAudio() {
-    // lastReaction được inject bởi Thymeleaf inline JS trong game.html
     if (typeof lastReaction === 'undefined') return;
 
+    // [UC4] Phát âm thanh chăm sóc khi reaction = "happy"
     if (lastReaction === 'happy') {
         playCareSound();
-    } else if (lastReaction === 'suspicious') {
+    }
+    // [UC3] Phát âm thanh trêu chọc khi reaction = "suspicious"
+    else if (lastReaction === 'suspicious') {
         playPrankSound();
-    } else if (lastReaction === 'angry') {
+    }
+    // [UC3 Penalty] Phát âm thanh crash khi reaction = "angry"
+    else if (lastReaction === 'angry') {
         playPenaltySound();
     }
 }
 
 // ============================================================
-// 3. CUSTOM CURSOR – Đổi con trỏ thành icon dụng cụ khi hover
+// 3. [UC2] CUSTOM CURSOR – Đổi con trỏ thành icon dụng cụ khi hover
+//    Trực quan hóa dụng cụ đang được chọn (UC2 requirement)
 // ============================================================
 function initCustomCursor() {
     const toolButtons = document.querySelectorAll('.tool-btn');
     const body = document.body;
 
-    // Tạo con trỏ tùy chỉnh dạng emoji
+    // Tạo con trỏ tùy chỉnh dạng emoji floating
     const cursorDiv = document.createElement('div');
     cursorDiv.id = 'custom-cursor';
     cursorDiv.style.cssText = `
@@ -144,18 +162,19 @@ function initCustomCursor() {
     `;
     document.body.appendChild(cursorDiv);
 
-    // Theo dõi chuột
+    // Theo dõi vị trí chuột để di chuyển cursor
     document.addEventListener('mousemove', (e) => {
         cursorDiv.style.left = e.clientX + 'px';
         cursorDiv.style.top = e.clientY + 'px';
     });
 
-    // Map từ toolId sang emoji cursor
+    // Map từ toolId sang emoji cursor (UC2 – nhận diện công cụ trực quan)
+    // comb=Lược, dryer=Máy sấy, feather=Lông vũ, spray=Bình xịt
     const toolCursorMap = {
-        'comb':    '🪮',
-        'dryer':   '💨',
-        'feather': '🪶',
-        'spray':   '💦'
+        'comb':    '🪮',  // [UC4] Lược chải lông → CARE
+        'dryer':   '💨',  // [UC4] Máy sấy → CARE
+        'feather': '🪶',  // [UC3] Lông vũ → PRANK
+        'spray':   '💦'   // [UC3] Bình xịt → PRANK
     };
 
     toolButtons.forEach(btn => {
@@ -164,6 +183,7 @@ function initCustomCursor() {
         const toolId = toolInput ? toolInput.value : null;
         const cursorEmoji = toolCursorMap[toolId] || '✋';
 
+        // Hiển thị emoji cursor khi hover vào nút dụng cụ
         btn.addEventListener('mouseenter', () => {
             cursorDiv.style.display = 'block';
             cursorDiv.textContent = cursorEmoji;
@@ -171,12 +191,14 @@ function initCustomCursor() {
             cursorDiv.style.transform = 'translate(-50%, -50%) scale(1.2)';
         });
 
+        // Ẩn emoji cursor khi rời khỏi nút
         btn.addEventListener('mouseleave', () => {
             cursorDiv.style.display = 'none';
             body.style.cursor = '';
             cursorDiv.style.transform = 'translate(-50%, -50%) scale(1)';
         });
 
+        // Animation nhấn xuống khi click
         btn.addEventListener('click', () => {
             cursorDiv.style.transform = 'translate(-50%, -50%) scale(0.8) rotate(20deg)';
             setTimeout(() => {
@@ -187,7 +209,8 @@ function initCustomCursor() {
 }
 
 // ============================================================
-// 4. HIỆU ỨNG CONFETTI KHI CARE (Hạnh phúc tăng)
+// 4. [UC4 – CHĂM SÓC] HIỆU ỨNG CONFETTI KHI CARE (Hạnh phúc tăng)
+//    12 hạt màu bay ra từ trung tâm màn hình khi lastReaction="happy"
 // ============================================================
 function spawnConfetti() {
     const colors = ['#c77dff', '#ff6b9d', '#ffd166', '#06d6a0', '#4cc9f0'];
@@ -224,7 +247,8 @@ function spawnConfetti() {
 }
 
 // ============================================================
-// 5. HIỆU ỨNG RUNG MÀN HÌNH KHI PENALTY
+// 5. [UC3 kết thúc – PENALTY] HIỆU ỨNG RUNG MÀN HÌNH
+//    Phát khi tải trang penalty.html – tăng cảm giác "bị phạt"
 // ============================================================
 function shakeScreen() {
     document.body.animate([
@@ -241,15 +265,18 @@ function shakeScreen() {
 // KHỞI ĐỘNG KHI TRANG LOAD XONG
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
+    // [UC2] Khởi tạo custom cursor cho khay dụng cụ
     initCustomCursor();
+
+    // [UC3+UC4] Phát âm thanh tương ứng với phản ứng thú cưng
     initGameAudio();
 
-    // Nếu lastReaction là happy → confetti
+    // [UC4] Nếu lastReaction là "happy" → bắn confetti
     if (typeof lastReaction !== 'undefined' && lastReaction === 'happy') {
         setTimeout(spawnConfetti, 100);
     }
 
-    // Nếu đang ở trang penalty → rung màn hình
+    // [UC3 Penalty] Nếu đang ở trang penalty → rung màn hình + âm thanh crash
     if (document.querySelector('.penalty-container')) {
         shakeScreen();
         playPenaltySound();

@@ -1,4 +1,20 @@
 <!DOCTYPE html>
+<!--
+  ============================================================
+  TEMPLATE: game.html – Màn hình chơi game chính
+  ============================================================
+  LIÊN QUAN ĐẾN:
+   - UC3: Thực hiện Trêu chọc thú cưng
+     → Hiển thị mục '😈 Trêu Chọc' trong tool shelf
+     → POST /game/interact với toolId=feather hoặc spray
+     → Render reaction-suspicious animation + cảnh báo suspicion >= 60%
+
+   - UC4: Thực hiện Chăm sóc thú cưng
+     → Hiển thị mục '💚 Chăm Sóc' trong tool shelf
+     → POST /game/interact với toolId=comb hoặc dryer
+     → Render reaction-happy animation + action-msg care
+  ============================================================
+-->
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
@@ -45,7 +61,7 @@
         </a>
     </div>
 
-    <!-- ===== THÔNG BÁO HÀNH ĐỘNG (Sau tương tác) ===== -->
+    <!-- ===== [UC3+UC4] THÔNG BÁO HÀNH ĐỘNG (Sau tương tác) ===== -->
     <div th:if="${gameSession.selectedTool != null}"
          class="action-msg"
          th:classappend="${gameSession.selectedTool.care} ? ' care' : ' prank'">
@@ -90,7 +106,7 @@
     <div class="tool-shelf glass-card">
         <h3>🧰 Dụng cụ</h3>
 
-        <!-- Dụng cụ CHĂM SÓC -->
+        <!-- [UC4] Dụng cụ CHĂM SÓC – Tăng Happiness, giảm Suspicion -->
         <div>
             <span class="tool-section-label label-care">💚 Chăm Sóc</span>
             <div th:each="tool : ${tools}" th:if="${tool.care}">
@@ -111,7 +127,7 @@
             </div>
         </div>
 
-        <!-- Dụng cụ TRÊU CHỌC -->
+        <!-- [UC3] Dụng cụ TRÊU CHỌC – Tăng Suspicion, có thể kích hoạt Game Over -->
         <div style="margin-top: 1rem;">
             <span class="tool-section-label label-prank">😈 Trêu Chọc</span>
             <div th:each="tool : ${tools}" th:if="${tool.prank}">
@@ -133,7 +149,7 @@
             </div>
         </div>
 
-        <!-- Cảnh báo khi Suspicion >= 60 -->
+        <!-- [UC3] Cảnh báo khi Suspicion >= 60% – Thú cưng sắp nổi giận -->
         <div th:if="${gameSession.suspicion >= 60}" class="suspicion-alert">
             ⚠️ Cảnh báo! Thú cưng sắp nổi giận rồi!
         </div>
