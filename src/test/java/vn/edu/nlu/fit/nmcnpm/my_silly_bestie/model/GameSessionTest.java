@@ -20,20 +20,26 @@ class GameSessionTest {
 
     @Test
     void testInitialState() {
+        System.out.println("\n>>> Running: testInitialState");
+        System.out.println("Asserting initial values... (Happiness: " + gameSession.getHappiness() + ", Suspicion: " + gameSession.getSuspicion() + ")");
         assertEquals(50, gameSession.getHappiness());
         assertEquals(0, gameSession.getSuspicion());
         assertFalse(gameSession.isGameOver());
         assertEquals("idle", gameSession.getLastReaction());
+        System.out.println("[SUCCESS] testInitialState passed!");
     }
 
     @Test
     void testStartNewGame() {
+        System.out.println("\n>>> Running: testStartNewGame");
         gameSession.setHappiness(80);
         gameSession.setSuspicion(40);
         gameSession.setGameOver(true);
         gameSession.setLastReaction("angry");
+        System.out.println("Configured mock game state (Happiness: 80, Suspicion: 40, GameOver: true)");
 
         gameSession.startNewGame(samplePet);
+        System.out.println("Started new game with pet: " + samplePet.getName());
 
         assertEquals(samplePet, gameSession.getCurrentPet());
         assertEquals(50, gameSession.getHappiness());
@@ -41,95 +47,107 @@ class GameSessionTest {
         assertFalse(gameSession.isGameOver());
         assertEquals("idle", gameSession.getLastReaction());
         assertNull(gameSession.getSelectedTool());
+        System.out.println("[SUCCESS] testStartNewGame passed! Game state reset to defaults.");
     }
 
     @Test
     void testApplyInteraction_CareTool() {
+        System.out.println("\n>>> Running: testApplyInteraction_CareTool");
         gameSession.startNewGame(samplePet);
-        // Dụng cụ chăm sóc: Tăng 15 hạnh phúc, isCare = true
         ToolEntity careTool = new ToolEntity("comb", "Lược chải", "Chải lông", "img/comb.png", "CARE", 0, 15);
-
-        // Giả sử nghi ngờ ban đầu đang ở mức 20
         gameSession.setSuspicion(20);
+        System.out.println("Before Interaction - Happiness: " + gameSession.getHappiness() + ", Suspicion: " + gameSession.getSuspicion());
 
         gameSession.applyInteraction(careTool);
+        System.out.println("Applied CARE Tool: " + careTool.getName() + " (+15 Happiness, -5 Suspicion)");
+        System.out.println("After Interaction - Happiness: " + gameSession.getHappiness() + ", Suspicion: " + gameSession.getSuspicion() + ", Reaction: " + gameSession.getLastReaction());
 
-        // Hạnh phúc tăng: 50 + 15 = 65
         assertEquals(65, gameSession.getHappiness());
-        // Nghi ngờ giảm đi 5: 20 - 5 = 15
         assertEquals(15, gameSession.getSuspicion());
-        // Phản ứng phải là "happy"
         assertEquals("happy", gameSession.getLastReaction());
         assertFalse(gameSession.isGameOver());
         assertEquals(careTool, gameSession.getSelectedTool());
+        System.out.println("[SUCCESS] testApplyInteraction_CareTool passed!");
     }
 
     @Test
     void testApplyInteraction_CareTool_Victory() {
+        System.out.println("\n>>> Running: testApplyInteraction_CareTool_Victory");
         gameSession.startNewGame(samplePet);
-        // Nâng happiness lên 85 trước
         gameSession.setHappiness(85);
         ToolEntity careTool = new ToolEntity("dryer", "Máy sấy", "Chăm sóc", "img/dryer.png", "CARE", 0, 20);
+        System.out.println("Before Interaction - Happiness: " + gameSession.getHappiness() + ", Suspicion: " + gameSession.getSuspicion());
 
         gameSession.applyInteraction(careTool);
+        System.out.println("Applied CARE Tool: " + careTool.getName() + " (+20 Happiness)");
+        System.out.println("After Interaction - Happiness: " + gameSession.getHappiness() + ", Victory: " + gameSession.isVictory() + ", Reaction: " + gameSession.getLastReaction());
 
-        // Happiness: 85 + 20 = 105 → giới hạn 100
         assertEquals(100, gameSession.getHappiness());
-        // Kết quả: trạng thái thắng và phản ứng đặc biệt
         assertTrue(gameSession.isVictory());
         assertEquals("victory", gameSession.getLastReaction());
         assertFalse(gameSession.isGameOver());
+        System.out.println("[SUCCESS] testApplyInteraction_CareTool_Victory passed! Victory triggered successfully.");
     }
 
     @Test
     void testApplyInteraction_CareTool_Limits() {
+        System.out.println("\n>>> Running: testApplyInteraction_CareTool_Limits");
         gameSession.startNewGame(samplePet);
         ToolEntity careTool = new ToolEntity("comb", "Lược chải", "Chải lông", "img/comb.png", "CARE", 0, 60);
+        System.out.println("Before Interaction - Happiness: " + gameSession.getHappiness() + ", Suspicion: " + gameSession.getSuspicion());
 
         gameSession.applyInteraction(careTool);
+        System.out.println("Applied CARE Tool with high value: +60 Happiness");
+        System.out.println("After Interaction - Happiness: " + gameSession.getHappiness() + " (Expected limit 100), Suspicion: " + gameSession.getSuspicion() + " (Expected limit 0)");
 
-        // Hạnh phúc tăng: 50 + 60 = 110 -> Giới hạn tối đa 100
         assertEquals(100, gameSession.getHappiness());
-        // Nghi ngờ ban đầu là 0 -> Giảm 5 -> Giới hạn tối thiểu 0
         assertEquals(0, gameSession.getSuspicion());
+        System.out.println("[SUCCESS] testApplyInteraction_CareTool_Limits passed! Boundary values capped correctly.");
     }
 
     @Test
     void testApplyInteraction_PrankTool() {
+        System.out.println("\n>>> Running: testApplyInteraction_PrankTool");
         gameSession.startNewGame(samplePet);
-        // Dụng cụ trêu chọc: tăng 30 nghi ngờ, tăng 5 hạnh phúc (vì thú thích được chú ý), isCare = false
         ToolEntity prankTool = new ToolEntity("feather", "Lông vũ", "Trêu chọc", "img/feather.png", "PRANK", 30, 5);
+        System.out.println("Before Interaction - Happiness: " + gameSession.getHappiness() + ", Suspicion: " + gameSession.getSuspicion());
 
         gameSession.applyInteraction(prankTool);
+        System.out.println("Applied PRANK Tool: " + prankTool.getName() + " (+30 Suspicion, +5 Happiness)");
+        System.out.println("After Interaction - Happiness: " + gameSession.getHappiness() + ", Suspicion: " + gameSession.getSuspicion() + ", Reaction: " + gameSession.getLastReaction());
 
-        // Nghi ngờ tăng: 0 + 30 = 30
         assertEquals(30, gameSession.getSuspicion());
-        // Hạnh phúc tăng: 50 + 5 = 55
         assertEquals(55, gameSession.getHappiness());
-        // Phản ứng là "suspicious"
         assertEquals("suspicious", gameSession.getLastReaction());
         assertFalse(gameSession.isGameOver());
+        System.out.println("[SUCCESS] testApplyInteraction_PrankTool passed!");
     }
 
     @Test
     void testApplyInteraction_PrankTool_GameOver() {
+        System.out.println("\n>>> Running: testApplyInteraction_PrankTool_GameOver");
         gameSession.startNewGame(samplePet);
         ToolEntity strongPrank = new ToolEntity("water_spray", "Bình xịt nước", "Trêu mạnh", "img/spray.png", "PRANK", 40, -10);
+        System.out.println("Before Interaction - Happiness: " + gameSession.getHappiness() + ", Suspicion: " + gameSession.getSuspicion());
 
-        // Lần 1: Nghi ngờ tăng 40
+        // Lần 1
         gameSession.applyInteraction(strongPrank);
+        System.out.println("Lần 1: Dùng " + strongPrank.getName() + " -> Suspicion: " + gameSession.getSuspicion() + ", GameOver: " + gameSession.isGameOver());
         assertEquals(40, gameSession.getSuspicion());
         assertFalse(gameSession.isGameOver());
 
-        // Lần 2: Nghi ngờ tăng 80
+        // Lần 2
         gameSession.applyInteraction(strongPrank);
+        System.out.println("Lần 2: Dùng " + strongPrank.getName() + " -> Suspicion: " + gameSession.getSuspicion() + ", GameOver: " + gameSession.isGameOver());
         assertEquals(80, gameSession.getSuspicion());
         assertFalse(gameSession.isGameOver());
 
-        // Lần 3: Nghi ngờ tăng 120 -> Giới hạn tối đa 100, Game Over kích hoạt
+        // Lần 3
         gameSession.applyInteraction(strongPrank);
+        System.out.println("Lần 3: Dùng " + strongPrank.getName() + " -> Suspicion: " + gameSession.getSuspicion() + ", GameOver: " + gameSession.isGameOver());
         assertEquals(100, gameSession.getSuspicion());
         assertTrue(gameSession.isGameOver());
         assertEquals("angry", gameSession.getLastReaction());
+        System.out.println("[SUCCESS] testApplyInteraction_PrankTool_GameOver passed! Game Over triggered successfully.");
     }
 }
