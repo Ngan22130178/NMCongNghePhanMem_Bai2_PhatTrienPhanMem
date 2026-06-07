@@ -16,3 +16,10 @@ VALUES ('comb', 'Cái lược', 'comb.png', 'brushing.mp3');
 
 INSERT INTO tools (tool_id, tool_name, cursor_path, sfx_path) 
 VALUES ('hand', 'Bàn tay', 'hand_cursor', 'patting.mp3'); -- 'hand_cursor' dùng làm cờ để bật CSS bàn tay
+
+CREATE TABLE IF NOT EXISTS game_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id VARCHAR(255),
+    result VARCHAR(50),
+    created_at DATETIME
+);

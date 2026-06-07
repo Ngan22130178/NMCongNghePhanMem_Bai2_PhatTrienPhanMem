@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo UC5 & UC6 - My Silly Bestie</title>
+    <style>
+        #game-area { width: 400px; margin: 50px auto; text-align: center; font-family: Arial; }
+        /* Hiển thị thú cưng */
+        #pet-image { width: 200px; height: 200px; margin-bottom: 20px; transition: 0.3s; }
+        
+        .black-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: black; display: none; color: white; 
+            flex-direction: column; justify-content: center; align-items: center; 
+        }
+        .status { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+
+<div id="game-area">
+    <h2>Thú cưng ảo</h2>
+    <img id="pet-image" src="assets/images/tho.jpg" alt="Thú cưng">
+    
+    <div class="status">
+        Độ nghi ngờ: <span id="suspicion-level">0</span>%
+    </div>
+    <button id="prank-btn" onclick="prankPet()">Trêu chọc (UC5)</button>
+</div>
+
+<div id="black-screen" class="black-screen">
+    <h1>BỊ PHẠT RỒI! (UC6)</h1>
+    <p>Thú cưng đã tức giận!</p>
+    <button onclick="resetGame()" style="padding: 10px 20px; cursor: pointer;">Chơi lại từ đầu</button>
+</div>
+
+<script>
+    let suspicion = 0;
+
+    function prankPet() {
+        suspicion += 40; 
+        document.getElementById('suspicion-level').innerText = suspicion;
+
+        if (suspicion >= 100) {
+            triggerPenalty();
+        }
+    }
+
+    function triggerPenalty() {
+        // UC5: Chuyển đổi sang ảnh bị phạt
+        const petImg = document.getElementById('pet-image');
+        petImg.src = 'assets/images/tho_trungPhat.jpeg';
+        
+        // Vô hiệu hóa nút bấm
+        document.getElementById('prank-btn').disabled = true;
+
+        // UC6: Hiển thị màn hình đen sau 5 giây (5000 milliseconds)
+        setTimeout(() => {
+            const screen = document.getElementById('black-screen');
+            screen.style.display = 'flex';
+            console.log("Session terminated & Result saved to DAO");
+        }, 5000); // Đã chỉnh sửa từ 1000 thành 5000
+    }
+</script>
+</body>
+</html>
