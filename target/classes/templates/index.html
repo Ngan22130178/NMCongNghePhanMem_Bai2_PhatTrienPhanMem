@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="My Silly Bestie – Trò chơi nuôi thú cưng ảo vui nhộn. Chăm sóc và trêu chọc những người bạn bốn chân tinh nghịch!"/>
+    <title th:text="${pageTitle}">My Silly Bestie</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="page-header">
+    <h1>🐾 My Silly Bestie</h1>
+    <p>Chọn người bạn bốn chân của bạn để bắt đầu cuộc vui! 🎉</p>
+</header>
+
+<!-- ===== DANH SÁCH THÚ CƯNG ===== -->
+<main>
+    <div class="pets-grid">
+        <!-- Thymeleaf lặp qua danh sách pets lấy từ database -->
+        <a th:each="pet : ${pets}"
+           th:href="@{/game(petId=${pet.id})}"
+           class="pet-card glass-card">
+
+            <!-- Hình ảnh thú cưng -->
+            <img th:src="@{/assets/images/pets/{img}(img=${pet.imagePath})}"
+                 th:alt="${pet.name}"
+                 class="pet-avatar"
+                 onerror="this.src='/assets/images/pets/default.png'"/>
+
+            <!-- Tên thú cưng -->
+            <h3 th:text="${pet.name}">Tên Thú Cưng</h3>
+
+            <!-- Hiển thị độ khó bằng ngôi sao -->
+            <div class="difficulty" th:text="${pet.difficultyStars}">⭐</div>
+
+            <!-- Mô tả thú cưng -->
+            <p th:text="${pet.description}">Mô tả thú cưng...</p>
+        </a>
+    </div>
+</main>
+
+<!-- ===== FLOATING PARTICLES (Trang trí) ===== -->
+<div class="particle" style="width:8px;height:8px;background:#c77dff;left:10%;animation-duration:8s;animation-delay:0s;"></div>
+<div class="particle" style="width:5px;height:5px;background:#ff6b9d;left:25%;animation-duration:11s;animation-delay:2s;"></div>
+<div class="particle" style="width:10px;height:10px;background:#ffd166;left:50%;animation-duration:9s;animation-delay:1s;"></div>
+<div class="particle" style="width:6px;height:6px;background:#06d6a0;left:75%;animation-duration:12s;animation-delay:3s;"></div>
+<div class="particle" style="width:7px;height:7px;background:#c77dff;left:90%;animation-duration:10s;animation-delay:0.5s;"></div>
+
+</body>
+</html>

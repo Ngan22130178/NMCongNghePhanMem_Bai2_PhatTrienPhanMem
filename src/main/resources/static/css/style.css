@@ -1,0 +1,551 @@
+/* ==============================================
+   MY SILLY BESTIE – GLOBAL STYLESHEET
+   Cozy Dark Mode + Glassmorphism + Animations
+   ============================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+
+/* ---------- CSS Variables ---------- */
+:root {
+    --bg-primary:      #1a1025;
+    --bg-secondary:    #2d1b4e;
+    --accent-pink:     #ff6b9d;
+    --accent-purple:   #c77dff;
+    --accent-yellow:   #ffd166;
+    --accent-teal:     #06d6a0;
+    --glass-bg:        rgba(255,255,255,0.08);
+    --glass-border:    rgba(255,255,255,0.15);
+    --text-primary:    #f0e6ff;
+    --text-muted:      #a78bca;
+    --shadow-glow:     0 8px 32px rgba(199,125,255,0.25);
+    --radius-lg:       20px;
+    --radius-md:       12px;
+    --transition:      all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Nền gradient động */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+            radial-gradient(ellipse at 20% 20%, rgba(199,125,255,0.15) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(255,107,157,0.12) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(6,214,160,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+body > * { position: relative; z-index: 1; }
+
+/* ---------- Glass Card ---------- */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-glow);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+    color: white;
+    box-shadow: 0 4px 20px rgba(199,125,255,0.4);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(199,125,255,0.6);
+}
+
+.btn-care {
+    background: linear-gradient(135deg, var(--accent-teal), #4cc9f0);
+    color: white;
+    box-shadow: 0 4px 15px rgba(6,214,160,0.35);
+}
+.btn-care:hover { transform: translateY(-2px) scale(1.03); }
+
+.btn-prank {
+    background: linear-gradient(135deg, var(--accent-yellow), #ff9f1c);
+    color: #1a1025;
+    box-shadow: 0 4px 15px rgba(255,209,102,0.35);
+}
+.btn-prank:hover { transform: translateY(-2px) scale(1.03); }
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef233c, #b5179e);
+    color: white;
+    box-shadow: 0 4px 20px rgba(239,35,60,0.4);
+}
+.btn-danger:hover { transform: translateY(-2px); }
+
+/* ---------- Page Header ---------- */
+.page-header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+}
+
+.page-header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink), var(--accent-yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* ======================================================
+   INDEX PAGE – Pet Selection Grid
+   ====================================================== */
+.pets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+}
+
+.pet-card {
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--text-primary);
+    display: block;
+}
+
+.pet-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(199,125,255,0.35);
+    border-color: var(--accent-purple);
+}
+
+.pet-card .pet-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 1rem;
+    border: 3px solid var(--glass-border);
+    transition: var(--transition);
+    display: block;
+}
+
+.pet-card:hover .pet-avatar {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 20px rgba(199,125,255,0.5);
+    animation: petBounce 0.6s ease;
+}
+
+.pet-card h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    color: var(--accent-yellow);
+    margin-bottom: 0.4rem;
+}
+
+.pet-card .difficulty {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.pet-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ======================================================
+   GAME PAGE – Main Game Area
+   ====================================================== */
+.game-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    grid-template-rows: auto 1fr;
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 2rem;
+}
+
+/* --- Status Bar (top full width) --- */
+.status-bar {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.2rem 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+.stat-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stat-bar {
+    height: 16px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+.happiness-fill {
+    background: linear-gradient(90deg, var(--accent-teal), #4cc9f0);
+    box-shadow: 0 0 10px rgba(6,214,160,0.5);
+}
+
+.suspicion-fill {
+    background: linear-gradient(90deg, var(--accent-yellow), var(--accent-pink));
+    box-shadow: 0 0 10px rgba(255,107,157,0.5);
+}
+
+/* Thanh Suspicion rung khi > 60% */
+.suspicion-warning .stat-bar-fill {
+    animation: suspicionPulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes suspicionPulse {
+    from { box-shadow: 0 0 8px rgba(255,107,157,0.5); }
+    to   { box-shadow: 0 0 20px rgba(255,107,157,0.9); }
+}
+
+/* --- Pet Arena --- */
+.pet-arena {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 2rem;
+    min-height: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Nền phòng khách */
+.pet-arena::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 35%;
+    background: linear-gradient(180deg, transparent, rgba(199,125,255,0.08));
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.pet-arena .pet-image-wrap {
+    position: relative;
+    z-index: 1;
+}
+
+.pet-arena img.pet-sprite {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 24px rgba(199,125,255,0.4));
+    transition: transform 0.3s ease;
+}
+
+/* Trạng thái idle: nhún nhảy nhẹ */
+.pet-sprite.reaction-idle    { animation: petIdle 3s ease-in-out infinite; }
+.pet-sprite.reaction-happy   { animation: petHappy 0.5s ease 3; }
+.pet-sprite.reaction-suspicious { animation: petShake 0.4s ease 3; }
+.pet-sprite.reaction-angry   { animation: petAngry 0.3s ease 5; }
+
+@keyframes petIdle {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25%       { transform: translateY(-8px) rotate(-2deg); }
+    75%       { transform: translateY(-4px) rotate(2deg); }
+}
+
+@keyframes petHappy {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.15) translateY(-10px); }
+}
+
+@keyframes petShake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-8px) rotate(-3deg); }
+    75%       { transform: translateX(8px) rotate(3deg); }
+}
+
+@keyframes petAngry {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25%       { transform: scale(1.1) rotate(-5deg); }
+    75%       { transform: scale(1.1) rotate(5deg); }
+}
+
+/* Bong bóng cảm xúc */
+.emotion-bubble {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    font-size: 2.5rem;
+    animation: bubbleFloat 2s ease infinite;
+    z-index: 2;
+}
+
+@keyframes bubbleFloat {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+    50%       { transform: translateY(-15px) scale(1.2); opacity: 0.8; }
+}
+
+.pet-name-badge {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    color: var(--accent-yellow);
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* --- Tool Shelf Panel --- */
+.tool-shelf {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tool-shelf h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    color: var(--accent-purple);
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tool-section-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+}
+
+.label-care  { background: rgba(6,214,160,0.2); color: var(--accent-teal); }
+.label-prank { background: rgba(255,209,102,0.2); color: var(--accent-yellow); }
+
+.tool-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border: 1.5px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-primary);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.tool-btn:hover {
+    border-color: var(--accent-purple);
+    background: rgba(199,125,255,0.12);
+    transform: translateX(4px);
+}
+
+.tool-btn .tool-icon { font-size: 1.4rem; }
+.tool-btn .tool-info { flex: 1; }
+.tool-btn .tool-info small { display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 600; }
+
+/* Ảnh icon dụng cụ thực */
+.tool-icon-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    border-radius: 8px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+.tool-btn:hover .tool-icon-img {
+    transform: rotate(-10deg) scale(1.15);
+}
+
+/* Cảnh báo Suspicion */
+.suspicion-alert {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: rgba(255,107,157,0.15);
+    border-radius: 10px;
+    border: 1px solid rgba(255,107,157,0.4);
+    font-size: 0.85rem;
+    color: #ff6b9d;
+    font-weight: 700;
+    text-align: center;
+    animation: suspicionPulse 0.5s ease infinite alternate;
+}
+
+/* --- Action Message --- */
+.action-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    animation: fadeSlideIn 0.4s ease;
+}
+
+.action-msg.care  { background: rgba(6,214,160,0.15); border: 1px solid rgba(6,214,160,0.3); color: var(--accent-teal); }
+.action-msg.prank { background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); color: var(--accent-yellow); }
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ======================================================
+   PENALTY PAGE
+   ====================================================== */
+.penalty-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    text-align: center;
+}
+
+.penalty-pet {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 30px rgba(255,107,157,0.7));
+    animation: petAngry 0.3s ease infinite;
+    margin: 2rem auto;
+    display: block;
+}
+
+.penalty-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: var(--accent-pink);
+    margin-bottom: 0.5rem;
+}
+
+.penalty-msg {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.penalty-stats {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-badge {
+    padding: 0.6rem 1.4rem;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.stat-badge.happiness { background: rgba(6,214,160,0.2); color: var(--accent-teal); border: 1px solid rgba(6,214,160,0.4); }
+.stat-badge.suspicion { background: rgba(255,107,157,0.2); color: var(--accent-pink); border: 1px solid rgba(255,107,157,0.4); }
+
+.penalty-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+/* ======================================================
+   ANIMATIONS & UTILITIES
+   ====================================================== */
+@keyframes petBounce {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.08) translateY(-6px); }
+}
+
+/* Floating particles (trang chủ) */
+.particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.4;
+    animation: particleFloat linear infinite;
+}
+
+@keyframes particleFloat {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.4; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 3px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+    }
+    .tool-shelf {
+        order: -1;
+    }
+}

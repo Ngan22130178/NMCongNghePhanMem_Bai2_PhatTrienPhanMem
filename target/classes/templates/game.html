@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="My Silly Bestie – Tương tác và chăm sóc thú cưng ảo của bạn!"/>
+    <title th:text="${pageTitle}">My Silly Bestie – Chơi Game</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- ===== THANH TRẠNG THÁI ===== -->
+<div class="game-layout">
+
+    <div class="status-bar glass-card"
+         th:classappend="${gameSession.suspicion >= 60} ? ' suspicion-warning' : ''">
+
+        <!-- Chỉ số Hạnh phúc -->
+        <div class="stat-item">
+            <div class="stat-label">
+                <span>😊 Hạnh phúc</span>
+                <span th:text="${gameSession.happiness} + '%'">50%</span>
+            </div>
+            <div class="stat-bar">
+                <div class="stat-bar-fill happiness-fill"
+                     th:style="'width:' + ${gameSession.happiness} + '%'"></div>
+            </div>
+        </div>
+
+        <!-- Chỉ số Nghi ngờ -->
+        <div class="stat-item">
+            <div class="stat-label">
+                <span>😤 Nghi ngờ</span>
+                <span th:text="${gameSession.suspicion} + '%'">0%</span>
+            </div>
+            <div class="stat-bar">
+                <div class="stat-bar-fill suspicion-fill"
+                     th:style="'width:' + ${gameSession.suspicion} + '%'"></div>
+            </div>
+        </div>
+
+        <!-- Nút về trang chủ -->
+        <a th:href="@{/game/restart}" class="btn btn-danger" style="flex-shrink:0;">
+            🏠 Chọn lại
+        </a>
+    </div>
+
+    <!-- ===== THÔNG BÁO HÀNH ĐỘNG (Sau tương tác) ===== -->
+    <div th:if="${gameSession.selectedTool != null}"
+         class="action-msg"
+         th:classappend="${gameSession.selectedTool.care} ? ' care' : ' prank'">
+        <span th:if="${gameSession.selectedTool.care}">
+            ✨ Bạn đã dùng <strong th:text="${gameSession.selectedTool.name}">dụng cụ</strong>!
+            Thú cưng rất vui! (+<span th:text="${gameSession.selectedTool.happinessRate}">0</span> Hạnh phúc)
+        </span>
+        <span th:if="${gameSession.selectedTool.prank}">
+            😈 Bạn đã trêu bằng <strong th:text="${gameSession.selectedTool.name}">dụng cụ</strong>!
+            Thú cưng bắt đầu nghi ngờ... (+<span th:text="${gameSession.selectedTool.suspicionRate}">0</span> Nghi ngờ)
+        </span>
+    </div>
+
+    <!-- ===== KHU VỰC THÚ CƯNG ===== -->
+    <div class="pet-arena glass-card">
+
+        <!-- Bong bóng cảm xúc -->
+        <div class="emotion-bubble">
+            <span th:switch="${gameSession.lastReaction}">
+                <span th:case="'happy'">😻</span>
+                <span th:case="'suspicious'">😾</span>
+                <span th:case="'angry'">💢</span>
+                <span th:case="*">💤</span>
+            </span>
+        </div>
+
+        <!-- Hình ảnh thú cưng với animation class theo trạng thái -->
+        <div class="pet-image-wrap">
+            <img th:src="@{/assets/images/pets/{img}(img=${gameSession.currentPet.imagePath})}"
+                 th:alt="${gameSession.currentPet.name}"
+                 class="pet-sprite"
+                 th:classappend="'reaction-' + ${gameSession.lastReaction}"
+                 id="petSprite"
+                 onerror="this.src='/assets/images/pets/default.png'"/>
+        </div>
+
+        <!-- Tên thú cưng -->
+        <div class="pet-name-badge" th:text="${gameSession.currentPet.name}">Tên Thú Cưng</div>
+    </div>
+
+    <!-- ===== KHAY DỤNG CỤ ===== -->
+    <div class="tool-shelf glass-card">
+        <h3>🧰 Dụng cụ</h3>
+
+        <!-- Dụng cụ CHĂM SÓC -->
+        <div>
+            <span class="tool-section-label label-care">💚 Chăm Sóc</span>
+            <div th:each="tool : ${tools}" th:if="${tool.care}">
+                <form method="post" th:action="@{/game/interact}">
+                    <input type="hidden" name="toolId" th:value="${tool.id}"/>
+                    <button type="submit" class="tool-btn">
+                        <img th:src="@{/assets/images/tools/{img}(img=${tool.imagePath})}"
+                             th:alt="${tool.name}"
+                             class="tool-icon-img"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'"/>
+                        <span class="tool-icon-fallback" style="display:none; font-size:1.4rem;">🪮</span>
+                        <span class="tool-info">
+                            <span th:text="${tool.name}">Lược</span>
+                            <small th:text="'+' + ${tool.happinessRate} + ' Hạnh phúc'">+15 Hạnh phúc</small>
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dụng cụ TRÊU CHỌC -->
+        <div style="margin-top: 1rem;">
+            <span class="tool-section-label label-prank">😈 Trêu Chọc</span>
+            <div th:each="tool : ${tools}" th:if="${tool.prank}">
+                <form method="post" th:action="@{/game/interact}">
+                    <input type="hidden" name="toolId" th:value="${tool.id}"/>
+                    <button type="submit" class="tool-btn">
+                        <img th:src="@{/assets/images/tools/{img}(img=${tool.imagePath})}"
+                             th:alt="${tool.name}"
+                             class="tool-icon-img"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'"/>
+                        <span class="tool-icon-fallback" style="display:none; font-size:1.4rem;">🪶</span>
+                        <span class="tool-info">
+                            <span th:text="${tool.name}">Lông vũ</span>
+                            <small th:text="'+' + ${tool.suspicionRate} + ' Nghi ngờ'"
+                                   style="color: #ffd166;">+25 Nghi ngờ</small>
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Cảnh báo khi Suspicion >= 60 -->
+        <div th:if="${gameSession.suspicion >= 60}" class="suspicion-alert">
+            ⚠️ Cảnh báo! Thú cưng sắp nổi giận rồi!
+        </div>
+    </div>
+
+</div><!-- end game-layout -->
+
+<!-- Inject trạng thái game vào JS -->
+<script th:inline="javascript">
+    const lastReaction = /*[[${gameSession.lastReaction}]]*/ 'idle';
+</script>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>
